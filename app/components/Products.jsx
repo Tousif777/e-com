@@ -5,12 +5,12 @@ import React, { useEffect, useState } from "react";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [showMore, setShowMore] = useState(false);
-  const [numToShow, setNumToShow] = useState(8);
+  const [numToShow, setNumToShow] = useState(4);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("https://dummyjson.com/products/search?q=phone");
+        const res = await fetch('https://dummyjson.com/products/category/smartphones')
         const data = await res.json();
         setProducts(data.products);
       } catch (error) {
@@ -27,41 +27,37 @@ const Products = () => {
 
   return (
     <section className="text-gray-600 body-font">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="flex flex-wrap -m-4">
+      <div className="container  py-10 ">
+        <header>
+          <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">Mobile Collection</h2>
+        </header>
+        <div  className="grid w-full  space-y-4 py-10 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-4">
+
           {products.slice(0, numToShow).map((product, index) => (
-            <div key={index} className="lg:w-1/4 md:w-1/2 p-4 w-full">
+            <div
+              key={index}
+              className="relative aspect-[16/9]  w-auto rounded-md md:aspect-auto md:h-[400px] "
+            >
               <Link href={`/product/${encodeURIComponent(product.id)}`}>
-                <a className="block relative h-48 rounded overflow-hidden">
-                  <img
-                    alt="ecommerce"
-                    className="object-cover object-center w-full h-full block"
-                    src={product.images[0]}
-                  />
-                </a>
-                <div className="mt-4">
-                  <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                    {product.brand}
-                  </h3>
-                  <h2 className="text-gray-900 title-font text-lg font-medium">
-                    {product.title}
-                  </h2>
-                  <p className="mt-1">${product.price}</p>
-                </div>
+              <img
+                src={product.images[0]}
+                alt="AirMax Pro"
+                className="z-0 h-full w-full rounded-md object-cover"
+              />
+              <div className="absolute inset-0 rounded-md bg-gradient-to-t from-gray-900 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 text-left">
+                <h1 className="text-lg font-semibold text-white">{product.brand}</h1>
+                <p className="mt-2 text-sm text-gray-300">
+                {product.title}
+                </p>
+                <button className="mt-2 inline-flex cursor-pointer items-center text-sm font-semibold text-white">
+                  Shop Now &rarr;
+                </button>
+              </div>
               </Link>
             </div>
           ))}
         </div>
-        {!showMore && products.length > 8 && (
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={handleShowMore}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-full"
-            >
-              See More
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );
